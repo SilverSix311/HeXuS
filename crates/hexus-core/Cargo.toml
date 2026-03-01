@@ -1,0 +1,15 @@
+[package]
+name = "hexus-core"
+description = "Core library for HeXuS biometric monitoring system"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+rusqlite.workspace = true
+chrono.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+tracing.workspace = true

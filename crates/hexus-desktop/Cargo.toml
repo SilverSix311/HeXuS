@@ -1,0 +1,16 @@
+[package]
+name = "hexus-desktop"
+description = "Desktop dashboard for HeXuS biometric monitoring system"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hexus-core = { path = "../hexus-core" }
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+anyhow.workspace = true
+
+# Tauri will be added when we set up the frontend
+# tauri = { version = "2", features = [] }
