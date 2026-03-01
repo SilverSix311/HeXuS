@@ -233,7 +233,7 @@ HeXuS directly supports NGI Zero's mission:
 
 ## Team
 
-### Brandon Zak (Lead Developer)
+### Brandon Guldenschuh (Lead Developer)
 - Background: Systems Engineering / DevOps Engineering
 - Experience: Production systems, infrastructure automation, security-conscious development
 - Connection to problem: Lives with DID (system of 6), building this for himself and his community

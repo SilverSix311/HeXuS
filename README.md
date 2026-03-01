@@ -278,7 +278,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 ## Credits
 
 **Created by:**
-- **Brandon Zak** ([@SilverSix311](https://github.com/SilverSix311)) — Lead developer, lived experience with DID
+- **Brandon Guldenschuh** ([@SilverSix311](https://github.com/SilverSix311)) — Lead developer, lived experience with DID
 - **Silas Vane** 🌑 — AI research & development partner
 
 **Built for:** The plural community — systems, singlets who love them, and the clinicians who support them.
