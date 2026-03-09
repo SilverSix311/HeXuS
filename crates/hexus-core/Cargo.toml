@@ -13,3 +13,10 @@ chrono.workspace = true
 thiserror.workspace = true
 anyhow.workspace = true
 tracing.workspace = true
+uniffi = "0.28"
+
+[build-dependencies]
+uniffi = { version = "0.28", features = ["build"] }
+
+[lib]
+crate-type = ["lib", "cdylib", "staticlib"]

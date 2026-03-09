@@ -1,0 +1,9 @@
+[package]
+name = "hexus-desktop"
+description = "Desktop application for HeXuS (stub)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+hexus-core = { path = "../hexus-core" }

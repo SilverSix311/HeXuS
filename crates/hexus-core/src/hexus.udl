@@ -1,0 +1,172 @@
+namespace hexus {
+  // Initialize database at given path
+  Database open_database(string path);
+  
+  // Create in-memory database (for testing)
+  Database create_in_memory_database();
+};
+
+// Error types exposed to FFI
+[Error]
+enum HeXuSError {
+  "DatabaseError",
+  "NotFound",
+  "ValidationError",
+  "SerializationError",
+  "InvalidTimeRange",
+  "Other",
+};
+
+// Biometric metric types
+enum BiometricMetric {
+  "HeartRate",
+  "HeartRateVariability",
+  "RestingHeartRate",
+  "GalvanicSkinResponse",
+  "SkinConductance",
+  "BloodGlucose",
+  "SleepDuration",
+  "SleepStage",
+  "Steps",
+  "ActiveCalories",
+  "SkinTemperature",
+  "RespiratoryRate",
+  "BloodOxygen",
+};
+
+// Fronting source type
+enum FrontingSourceType {
+  "Manual",
+  "Biometric",
+  "Import",
+};
+
+// Simplified fronting source for FFI
+dictionary FrontingSource {
+  FrontingSourceType source_type;
+  string? extra_data;
+};
+
+// Alter record
+dictionary Alter {
+  string id;
+  string name;
+  string? color;
+  string? emoji;
+  string? notes;
+  i64 created_at; // Unix timestamp in seconds
+};
+
+// Fronting log entry
+dictionary FrontingLog {
+  string id;
+  string? alter_id;
+  f32? confidence;
+  FrontingSource source;
+  i64 started_at; // Unix timestamp in seconds
+  i64? ended_at;  // Unix timestamp in seconds
+  string? notes;
+};
+
+// Biometric sample
+dictionary BiometricSample {
+  string id;
+  i64 timestamp; // Unix timestamp in seconds
+  BiometricMetric metric;
+  f64 value;
+  string unit;
+  string source;
+  string? fronting_id;
+};
+
+// Alter baseline
+dictionary AlterBaseline {
+  string alter_id;
+  BiometricMetric metric;
+  f64 mean;
+  f64 std_dev;
+  f64 min;
+  f64 max;
+  u32 sample_count;
+  i64 updated_at; // Unix timestamp in seconds
+};
+
+// Query filters
+dictionary FrontingLogQuery {
+  string? alter_id;
+  i64? start_time;
+  i64? end_time;
+  u32? limit;
+};
+
+dictionary BiometricQuery {
+  BiometricMetric? metric;
+  i64? start_time;
+  i64? end_time;
+  string? source;
+  u32? limit;
+};
+
+// Database interface
+interface Database {
+  // Alter operations
+  [Throws=HeXuSError]
+  void create_alter(Alter alter);
+  
+  [Throws=HeXuSError]
+  Alter get_alter(string id);
+  
+  [Throws=HeXuSError]
+  sequence<Alter> list_alters();
+  
+  [Throws=HeXuSError]
+  void update_alter(Alter alter);
+  
+  [Throws=HeXuSError]
+  void delete_alter(string id);
+  
+  // Fronting log operations
+  [Throws=HeXuSError]
+  void create_fronting_log(FrontingLog log);
+  
+  [Throws=HeXuSError]
+  FrontingLog get_fronting_log(string id);
+  
+  [Throws=HeXuSError]
+  sequence<FrontingLog> query_fronting_logs(FrontingLogQuery query);
+  
+  [Throws=HeXuSError]
+  void update_fronting_log(FrontingLog log);
+  
+  [Throws=HeXuSError]
+  void delete_fronting_log(string id);
+  
+  // Biometric sample operations
+  [Throws=HeXuSError]
+  void create_biometric_sample(BiometricSample sample);
+  
+  [Throws=HeXuSError]
+  void create_biometric_samples_batch(sequence<BiometricSample> samples);
+  
+  [Throws=HeXuSError]
+  BiometricSample get_biometric_sample(string id);
+  
+  [Throws=HeXuSError]
+  sequence<BiometricSample> query_biometric_samples(BiometricQuery query);
+  
+  [Throws=HeXuSError]
+  u32 delete_biometric_samples_before(i64 timestamp);
+  
+  // Baseline operations
+  [Throws=HeXuSError]
+  void upsert_baseline(AlterBaseline baseline);
+  
+  [Throws=HeXuSError]
+  AlterBaseline get_baseline(string alter_id, BiometricMetric metric);
+  
+  [Throws=HeXuSError]
+  sequence<AlterBaseline> list_baselines_for_alter(string alter_id);
+  
+  [Throws=HeXuSError]
+  u32 delete_baselines_for_alter(string alter_id);
+};

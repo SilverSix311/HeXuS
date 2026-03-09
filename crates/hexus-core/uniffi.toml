@@ -1,0 +1,10 @@
+[bindings.swift]
+# Swift code generation settings
+module_name = "HeXuSCore"
+ffi_module_name = "HeXuSCoreFFI"
+generate_module_map = true
+
+[bindings.kotlin]
+# Kotlin code generation settings
+package_name = "dev.hexus.core"
+cdylib_name = "hexus_core"
