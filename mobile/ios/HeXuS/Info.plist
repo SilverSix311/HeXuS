@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- App Identity -->
+	<key>CFBundleDisplayName</key>
+	<string>HeXuS</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.hexus.app</string>
+	<key>CFBundleName</key>
+	<string>HeXuS</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	
+	<!-- HealthKit Capability -->
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>healthkit</string>
+	</array>
+	
+	<!-- Privacy Usage Descriptions (REQUIRED for HealthKit) -->
+	<key>NSHealthShareUsageDescription</key>
+	<string>HeXuS reads your heart rate, heart rate variability, sleep data, and activity metrics to detect patterns that may correlate with fronter switches in plural systems. This data is processed locally on your device and never shared with third parties.</string>
+	
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>HeXuS does not write any data to HealthKit. This permission is not used.</string>
+	
+	<!-- Background Modes -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+	</array>
+	
+	<!-- Background Task Identifiers (for BGTaskScheduler) -->
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.hexus.app.refresh</string>
+		<string>com.hexus.app.processing</string>
+	</array>
+	
+	<!-- UI Configuration -->
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- Allow local network connections to desktop server -->
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<!-- Optional: Allow arbitrary loads for development (disable in production) -->
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	
+	<!-- Privacy Manifest (iOS 17+) -->
+	<!-- See PrivacyInfo.xcprivacy for detailed privacy manifest -->
+</dict>
+</plist>
