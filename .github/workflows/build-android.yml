@@ -1,0 +1,61 @@
+name: Build Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android
+
+      - name: Set up NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26b
+
+      - name: Install uniffi-bindgen
+        run: cargo install uniffi-bindgen
+
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk
+
+      - name: Build hexus-core for Android
+        working-directory: crates/hexus-core
+        run: |
+          if [ "${{ inputs.build_type }}" = "release" ]; then
+            cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 build --release
+          else
+            cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 build
+          fi
+
+      - name: Generate Kotlin bindings
+        working-directory: crates/hexus-core
+        run: |
+          mkdir -p ../../mobile/android/Generated
+          uniffi-bindgen generate src/hexus.udl --language kotlin --out-dir ../../mobile/android/Generated
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-build-${{ inputs.build_type }}
+          path: |
+            target/aarch64-linux-android/
+            target/armv7-linux-androideabi/
+            target/x86_64-linux-android/
+            mobile/android/Generated/
+          retention-days: 7

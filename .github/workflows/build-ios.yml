@@ -1,0 +1,61 @@
+name: Build iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build-ios:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-action@stable
+        with:
+          targets: aarch64-apple-ios, aarch64-apple-ios-sim, x86_64-apple-ios
+
+      - name: Install uniffi-bindgen
+        run: cargo install uniffi-bindgen
+
+      - name: Build hexus-core for iOS (arm64)
+        working-directory: crates/hexus-core
+        run: |
+          if [ "${{ inputs.build_type }}" = "release" ]; then
+            cargo build --release --target aarch64-apple-ios
+          else
+            cargo build --target aarch64-apple-ios
+          fi
+
+      - name: Build hexus-core for iOS Simulator (arm64)
+        working-directory: crates/hexus-core
+        run: |
+          if [ "${{ inputs.build_type }}" = "release" ]; then
+            cargo build --release --target aarch64-apple-ios-sim
+          else
+            cargo build --target aarch64-apple-ios-sim
+          fi
+
+      - name: Generate Swift bindings
+        working-directory: crates/hexus-core
+        run: |
+          mkdir -p ../../mobile/ios/Generated
+          uniffi-bindgen generate src/hexus.udl --language swift --out-dir ../../mobile/ios/Generated
+
+      - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-${{ inputs.build_type }}
+          path: |
+            target/aarch64-apple-ios/
+            target/aarch64-apple-ios-sim/
+            mobile/ios/Generated/
+          retention-days: 7
